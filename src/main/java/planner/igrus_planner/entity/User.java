@@ -1,15 +1,13 @@
 package planner.igrus_planner.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Entity
 @Getter
+@Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,10 +19,10 @@ public class User {
     private String username;
     @Column
     private String password;
-    @Column
+    @Column(unique = true)
     private String email;
     @Column
-    private LocalDate birthDate;
+    private String birthDate;
     @Column
     private String gender;
 }
