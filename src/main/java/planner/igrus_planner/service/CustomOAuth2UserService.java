@@ -16,6 +16,7 @@ import java.util.Collections;
 
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+
     @Autowired
     private UserRepository userRepository;
 
@@ -25,9 +26,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = oAuth2UserService.loadUser(userRequest);
 
-        // Google에서 제공하는 사용자 정보
+        // OAuth2User 정보 로깅
         String email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("name");
+        System.out.println("OAuth2User 정보: 이메일=" + email + ", 이름=" + name); // 로그 추가
 
         // 사용자 데이터베이스에 존재 여부 확인
         User user = userRepository.findByEmail(email);
@@ -37,7 +39,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             user.setEmail(email);
             user.setUsername(name);
             user.setPassword(""); // OAuth2 로그인 사용자는 비밀번호가 필요하지 않음
-            user.setGender("unknown"); // 필요한 경우 기본값 설정
+            user.setGender("unknown"); // 기본값 설정
             userRepository.save(user);
         }
 
@@ -47,3 +49,4 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 "email");
     }
 }
+
